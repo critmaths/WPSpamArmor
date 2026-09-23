@@ -1,0 +1,26 @@
+/**
+ * SpamArmor Frontend Deceptive Honeypot & Shield Styling
+ */
+.spm-shield-container {
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    user-select: none !important;
+    z-index: -9999 !important;
+}
+
+.spm-shield-container input {
+    display: block !important;
+    width: 0 !important;
+    height: 0 !important;
+    visibility: visible !important;
+}

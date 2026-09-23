@@ -1,0 +1,66 @@
+=== SpamArmor - Open Source Spam & Bot Protection ===
+Contributors: spamarmor
+Tags: spam, anti-spam, akismet alternative, honeypot, bot protection, forms spam, comments spam, proof-of-work
+Requires at least: 5.8
+Tested up to: 6.7
+Requires PHP: 7.4
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+Next-generation, 100% open-source, privacy-first spam and bot defense for WordPress. Zero API keys, zero monthly fees, zero cloud telemetry.
+
+== Description ==
+
+**SpamArmor** is the modern open-source alternative to Akismet. It delivers defense-in-depth bot and spam protection directly on your WordPress server with **zero cloud dependencies, zero external subscriptions, and complete GDPR compliance**.
+
+Unlike commercial anti-spam plugins that transmit your visitors' comments, email addresses, and IP records to corporate cloud servers, SpamArmor processes all validation heuristics locally.
+
+### 🛡️ Why SpamArmor Leaves Akismet in the Dust
+* **100% Free & Open Source:** No commercial licensing paywalls or surprise invoices.
+* **100% Privacy & GDPR Compliant:** No personal data leaves your hosting environment.
+* **Zero User Friction (No Annoying CAPTCHAs):** No distorted text puzzles or "select all traffic lights" headaches for your human visitors.
+* **Micro Proof-of-Work (PoW):** An ultra-fast (5-15ms) client-side cryptographic challenge that neutralizes headless botnets and automated scrapers.
+* **Dynamic Salted Honeypot:** Randomized, deceptive decoy fields that bots automatically fill.
+* **HMAC Time-Gate Velocity:** Detects automated submissions occurring faster than human reading speed (<3 seconds).
+* **Content Heuristic Engine:** Analyzes excessive URLs, high-risk spam TLDs (.xyz, .top, .click, etc.), BBCode tags, and bad word vectors.
+* **Full-Page Cache Compatible:** Built-in REST API token hydration prevents stale nonce issues with WP Rocket, LiteSpeed Cache, Cloudflare, and W3 Total Cache.
+* **Universal Form Integrations:** Out-of-the-box support for WP Comments, User Registrations, Logins, Contact Form 7, WPForms, Gravity Forms, Fluent Forms, and WooCommerce.
+
+### ⚡ Supported Integrations
+* **WordPress Core Comments**
+* **WordPress User Registration & Login**
+* **Contact Form 7**
+* **WPForms (Lite & Pro)**
+* **Gravity Forms**
+* **Fluent Forms**
+* **WooCommerce (Reviews & Customer Registration)**
+
+== Installation ==
+
+1. Upload the `wp-spam-protection` or `spamarmor` directory to `/wp-content/plugins/`.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+3. Navigate to **SpamArmor > Settings** in your WordPress admin menu to review or customize your protection rules.
+4. That's it! Protection is active immediately with zero API keys required.
+
+== Frequently Asked Questions ==
+
+= Does SpamArmor require an API key? =
+No! SpamArmor is completely self-contained. You do not need to register on any third-party website or obtain an API key.
+
+= How does SpamArmor stop bots without CAPTCHAs? =
+SpamArmor combines 6 coordinated defense layers: dynamic honeypots, HMAC time-gate verification, micro Proof-of-Work client puzzles, human interaction behavioral entropy, content link heuristics, and network rate limiting.
+
+= Is SpamArmor compliant with GDPR? =
+Yes! SpamArmor does not send any visitor data to external servers. It also features optional IP masking (anonymizing the last octet) for complete privacy compliance.
+
+= Does it work with caching plugins? =
+Yes! SpamArmor uses an asynchronous REST API token endpoint (`/wp-json/spamarmor/v1/token`) to provide fresh security tokens, so full-page caching from WP Rocket, LiteSpeed, or Cloudflare never breaks protection.
+
+== Changelog ==
+
+= 1.0.0 =
+* Initial public open source release.
+* 6-layer defense engine: Honeypot, Time-gate, Micro-PoW, Behavioral entropy, Heuristics, and Rate Limiting.
+* Support for Comments, Registration, Login, Contact Form 7, WPForms, Gravity Forms, Fluent Forms, and WooCommerce.
+* Modern administrative dashboard with 7-day trend chart and spam event audit log.
