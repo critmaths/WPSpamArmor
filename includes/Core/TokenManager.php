@@ -26,7 +26,9 @@ class TokenManager {
         // Fallback site salt stored in options if salts are undefined
         $salt = get_option('spamarmor_fallback_salt');
         if (!$salt) {
-            $salt = wp_generate_password(64, true, true);
+            $salt = function_exists('wp_generate_password') 
+                ? wp_generate_password(64, true, true) 
+                : bin2hex(random_bytes(32));
             update_option('spamarmor_fallback_salt', $salt);
         }
         return $salt;

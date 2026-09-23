@@ -92,6 +92,13 @@ class StatsRepository {
             ARRAY_A
         );
 
+        if (!is_array($allTime)) {
+            $allTime = [];
+        }
+        if (!is_array($todayStats)) {
+            $todayStats = [];
+        }
+
         $totalSpam = (int)($allTime['total_spam'] ?? 0);
         $totalClean = (int)($allTime['total_clean'] ?? 0);
         $todaySpam = (int)($todayStats['today_spam'] ?? 0);
