@@ -1,5 +1,5 @@
 === SpamArmor - Open Source Spam & Bot Protection ===
-Contributors: critmaths
+Contributors: spamarmor
 Tags: spam, anti-spam, akismet alternative, honeypot, bot protection, forms spam, comments spam, proof-of-work
 Requires at least: 5.8
 Tested up to: 6.7

@@ -13,17 +13,9 @@ if (!defined('ABSPATH')) {
                 <p class="spamarmor-subtitle"><?php esc_html_e('Autonomous, privacy-first open-source spam and bot defense for WordPress.', 'spamarmor'); ?></p>
             </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <a href="https://criticalmaths.synergize.co" target="_blank" rel="noopener noreferrer" class="button button-secondary" style="display: inline-flex; align-items: center; gap: 5px;">
-                <span class="dashicons dashicons-admin-site-alt3"></span> <?php esc_html_e('Community Site', 'spamarmor'); ?>
-            </a>
-            <a href="https://github.com/critmaths/WPSpamArmor" target="_blank" rel="noopener noreferrer" class="button button-secondary" style="display: inline-flex; align-items: center; gap: 5px;">
-                <span class="dashicons dashicons-admin-links"></span> <?php esc_html_e('GitHub Repo', 'spamarmor'); ?>
-            </a>
-            <div class="spamarmor-status-pill">
-                <span class="spamarmor-status-dot online"></span>
-                <span><?php esc_html_e('Protection Active (Local Mode)', 'spamarmor'); ?></span>
-            </div>
+        <div class="spamarmor-status-pill">
+            <span class="spamarmor-status-dot online"></span>
+            <span><?php esc_html_e('Protection Active (Local Mode)', 'spamarmor'); ?></span>
         </div>
     </div>
 
