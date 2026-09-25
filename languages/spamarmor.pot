@@ -1,0 +1,35 @@
+# Copyright (C) 2026 SpamArmor Community
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: SpamArmor 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/critmaths/WPSpamArmor/issues\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-24T21:20:00+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.9.0\n"
+"X-Domain: spamarmor\n"
+
+#. Plugin Name of the plugin
+msgid "SpamArmor - Open Source Spam & Bot Protection"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/critmaths/WPSpamArmor/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Next-generation, privacy-first open-source spam and bot protection for WordPress. Zero subscriptions, zero external cloud dependencies."
+msgstr ""
+
+#. Author of the plugin
+msgid "SpamArmor Community"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://criticalmaths.synergize.co"
+msgstr ""
