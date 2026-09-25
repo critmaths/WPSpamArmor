@@ -15,3 +15,5 @@ npm-debug.log
 # Temporary / Log files
 *.log
 scratch/
+.tmp.driveupload/
+*.zip
