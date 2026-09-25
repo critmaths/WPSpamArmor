@@ -91,11 +91,6 @@ class Plugin {
         // Boot admin if in wp-admin
         if ($this->adminController !== null) {
             $this->adminController->init();
-            add_action('admin_init', function() {
-                if (get_option('spamarmor_db_version') !== SPAMARMOR_VERSION) {
-                    Schema::createTables();
-                }
-            });
         }
 
         // Boot all enabled form adapters
