@@ -1,6 +1,6 @@
 === SpamArmor - Open Source Spam & Bot Protection ===
 Contributors: critmaths
-Tags: spam, anti-spam, honeypot, bot protection, akismet
+Tags: spam, anti-spam, honeypot, bot protection, comments spam
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -12,11 +12,11 @@ Next-generation, 100% open-source, privacy-first spam and bot defense for WordPr
 
 == Description ==
 
-**SpamArmor** is the modern open-source alternative to Akismet. It delivers defense-in-depth bot and spam protection directly on your WordPress server with **zero cloud dependencies, zero external subscriptions, and complete GDPR compliance**.
+**SpamArmor** is a modern, privacy-focused open-source spam and bot defense system for WordPress. It delivers defense-in-depth protection directly on your WordPress server with **zero cloud dependencies, zero external subscriptions, and complete GDPR compliance**.
 
-Unlike commercial anti-spam plugins that transmit your visitors' comments, email addresses, and IP records to corporate cloud servers, SpamArmor processes all validation heuristics locally.
+Unlike commercial services that transmit your visitors' comments, email addresses, and IP records to external cloud servers, SpamArmor processes all validation heuristics locally.
 
-### 🛡️ Why SpamArmor Leaves Akismet in the Dust
+### 🛡️ Why Choose SpamArmor
 * **100% Free & Open Source:** No commercial licensing paywalls or surprise invoices.
 * **100% Privacy & GDPR Compliant:** No personal data leaves your hosting environment.
 * **Zero User Friction (No Annoying CAPTCHAs):** No distorted text puzzles or "select all traffic lights" headaches for your human visitors.

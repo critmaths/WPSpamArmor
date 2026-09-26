@@ -6,14 +6,14 @@
 [![Zero Cloud](https://img.shields.io/badge/Cloud%20Dependencies-0%25%20(100%25%20Local)-brightgreen.svg)]()
 [![Privacy](https://img.shields.io/badge/GDPR-100%25%20Compliant-success.svg)]()
 
-> **Leave Akismet on the side of the road.**  
-> SpamArmor is an autonomous, privacy-first, zero-subscription open-source spam and bot defense system built for modern WordPress websites.
+> **Privacy-first, zero-subscription open-source spam and bot defense built for modern WordPress websites.**  
+> Stop automated attacks locally without external subscriptions, API keys, or cloud surveillance.
 
 ---
 
 ## 🚀 Why SpamArmor?
 
-| Feature | **Akismet** | **SpamArmor** |
+| Feature | **Traditional Cloud Anti-Spam** | **SpamArmor** |
 | :--- | :---: | :---: |
 | **Pricing / License** | Paid subscription for commercial sites | **100% Free & Open Source (GPLv2+)** |
 | **Data Privacy (GDPR)** | ⚠️ Transmits all visitor data to 3rd party cloud | **100% Local Processing (Zero data leaves host)** |
