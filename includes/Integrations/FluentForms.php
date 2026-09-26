@@ -50,18 +50,18 @@ class FluentForms implements IntegrationInterface {
         $contentParts = [];
         if (is_array($formData)) {
             foreach ($formData as $k => $v) {
-                if (is_string($v) && strpos($k, 'spm_') === false) {
-                    $contentParts[] = $v;
+                if (is_string($v) && strpos($k, 'spamarmor_') === false) {
+                    $contentParts[] = sanitize_text_field($v);
                 }
             }
         }
 
         $engine = Plugin::instance()->getProtectionEngine();
         $context = [
-            'post'       => $_POST,
+            'post'       => wp_unslash($_POST),
             'form_type'  => 'fluentforms',
             'ip'         => TokenManager::getClientIp(),
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+            'user_agent' => TokenManager::getUserAgent(),
             'content'    => implode("\n", $contentParts),
             'user_id'    => get_current_user_id()
         ];
@@ -69,11 +69,11 @@ class FluentForms implements IntegrationInterface {
         $verdict = $engine->evaluate($context);
 
         if ($verdict['is_spam']) {
-            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Spam submission prevented.', 'spamarmor');
+            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Spam submission prevented.', 'spamarmor-open-source-spam-bot-protection');
 
             wp_send_json_error([
                 'errors' => [
-                    'spamarmor' => [sprintf(__('SpamArmor: %s', 'spamarmor'), esc_html($reason))]
+                    'spamarmor' => [sprintf(__('SpamArmor: %s', 'spamarmor-open-source-spam-bot-protection'), esc_html($reason))]
                 ]
             ], 422);
         }

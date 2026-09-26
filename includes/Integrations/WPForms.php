@@ -58,11 +58,11 @@ class WPForms implements IntegrationInterface {
 
         $engine = Plugin::instance()->getProtectionEngine();
         $context = [
-            'post'       => $_POST,
+            'post'       => wp_unslash($_POST),
             'form_type'  => 'wpforms',
             'ip'         => TokenManager::getClientIp(),
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
-            'content'    => implode("\n", $contentParts),
+            'user_agent' => TokenManager::getUserAgent(),
+            'content'    => implode("\n", array_map('sanitize_text_field', $contentParts)),
             'user_id'    => get_current_user_id()
         ];
 
@@ -70,11 +70,11 @@ class WPForms implements IntegrationInterface {
 
         if ($verdict['is_spam']) {
             $formId = absint($form_data['id'] ?? 0);
-            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Spam activity detected.', 'spamarmor');
+            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Spam activity detected.', 'spamarmor-open-source-spam-bot-protection');
 
             if (function_exists('wpforms') && isset(wpforms()->process)) {
                 wpforms()->process->errors[$formId]['header'] = sprintf(
-                    __('Spam protection alert: %s', 'spamarmor'),
+                    __('Spam protection alert: %s', 'spamarmor-open-source-spam-bot-protection'),
                     esc_html($reason)
                 );
             }

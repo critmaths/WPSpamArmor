@@ -54,21 +54,21 @@ class WordPressRegistration implements IntegrationInterface {
     public function validateRegistration($errors, $sanitized_user_login, $user_email) {
         $engine = Plugin::instance()->getProtectionEngine();
         $context = [
-            'post'       => $_POST,
+            'post'       => wp_unslash($_POST),
             'form_type'  => 'registration',
             'ip'         => TokenManager::getClientIp(),
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
-            'content'    => $sanitized_user_login . ' ' . $user_email,
+            'user_agent' => TokenManager::getUserAgent(),
+            'content'    => sanitize_user($sanitized_user_login) . ' ' . sanitize_email($user_email),
             'user_id'    => null
         ];
 
         $verdict = $engine->evaluate($context);
 
         if ($verdict['is_spam']) {
-            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Automated bot activity detected.', 'spamarmor');
+            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Automated bot activity detected.', 'spamarmor-open-source-spam-bot-protection');
             $errors->add(
                 'spamarmor_blocked',
-                sprintf('<strong>%s:</strong> %s', esc_html__('Registration Error', 'spamarmor'), esc_html($reason))
+                sprintf('<strong>%s:</strong> %s', esc_html__('Registration Error', 'spamarmor-open-source-spam-bot-protection'), esc_html($reason))
             );
         }
 

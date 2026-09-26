@@ -35,7 +35,7 @@
 
     function updateBehaviorPayloads() {
         var encoded = btoa(JSON.stringify(entropy));
-        var inputs = document.querySelectorAll('.spm-behavior-payload');
+        var inputs = document.querySelectorAll('.spamarmor-behavior-payload, .spm-behavior-payload');
         for (var i = 0; i < inputs.length; i++) {
             inputs[i].value = encoded;
         }
@@ -64,15 +64,15 @@
 
     // 3. Process all protected forms on the page
     async function processContainers() {
-        var containers = document.querySelectorAll('.spm-shield-container');
+        var containers = document.querySelectorAll('.spamarmor-shield-container, .spm-shield-container');
         if (!containers.length) return;
 
         updateBehaviorPayloads();
 
         for (var i = 0; i < containers.length; i++) {
             var container = containers[i];
-            var tokenInput = container.querySelector('.spm-pow-token');
-            var nonceInput = container.querySelector('.spm-pow-nonce');
+            var tokenInput = container.querySelector('.spamarmor-pow-token, .spm-pow-token');
+            var nonceInput = container.querySelector('.spamarmor-pow-nonce, .spm-pow-nonce');
 
             if (!tokenInput || !nonceInput || nonceInput.value) continue;
 
@@ -113,8 +113,8 @@
             if (response.ok) {
                 var data = await response.json();
                 if (data && data.success) {
-                    var timeInputs = document.querySelectorAll('.spm-time-token');
-                    var powInputs = document.querySelectorAll('.spm-pow-token');
+                    var timeInputs = document.querySelectorAll('.spamarmor-time-token, .spm-time-token');
+                    var powInputs = document.querySelectorAll('.spamarmor-pow-token, .spm-pow-token');
 
                     for (var i = 0; i < timeInputs.length; i++) {
                         timeInputs[i].value = data.timeToken;

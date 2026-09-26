@@ -59,21 +59,21 @@ class WordPressLogin implements IntegrationInterface {
 
         $engine = Plugin::instance()->getProtectionEngine();
         $context = [
-            'post'       => $_POST,
+            'post'       => wp_unslash($_POST),
             'form_type'  => 'login',
             'ip'         => TokenManager::getClientIp(),
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
-            'content'    => $username,
+            'user_agent' => TokenManager::getUserAgent(),
+            'content'    => sanitize_user($username),
             'user_id'    => null
         ];
 
         $verdict = $engine->evaluate($context);
 
         if ($verdict['is_spam']) {
-            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Suspicious automated login request.', 'spamarmor');
+            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Suspicious automated login request.', 'spamarmor-open-source-spam-bot-protection');
             return new \WP_Error(
                 'spamarmor_login_blocked',
-                sprintf('<strong>%s:</strong> %s', esc_html__('Access Denied', 'spamarmor'), esc_html($reason))
+                sprintf('<strong>%s:</strong> %s', esc_html__('Access Denied', 'spamarmor-open-source-spam-bot-protection'), esc_html($reason))
             );
         }
 

@@ -40,7 +40,7 @@ class TokenManager {
      */
     public static function getHoneypotFieldName() {
         $hash = substr(hash_hmac('sha256', 'honeypot_field_v1', self::getSecret()), 0, 10);
-        return 'spm_hp_' . $hash;
+        return 'spamarmor_hp_' . $hash;
     }
 
     /**
@@ -160,7 +160,7 @@ class TokenManager {
     }
 
     /**
-     * Get real client IP address from server headers.
+     * Get real client IP address from server headers (strictly sanitized).
      *
      * @return string
      */
@@ -175,7 +175,8 @@ class TokenManager {
 
         foreach ($headers as $header) {
             if (!empty($_SERVER[$header])) {
-                $rawList = explode(',', $_SERVER[$header]);
+                $rawHeader = sanitize_text_field(wp_unslash($_SERVER[$header]));
+                $rawList = explode(',', $rawHeader);
                 $candidate = trim($rawList[0]);
                 if (filter_var($candidate, FILTER_VALIDATE_IP)) {
                     $ip = $candidate;
@@ -185,6 +186,17 @@ class TokenManager {
         }
 
         return $ip ?: '127.0.0.1';
+    }
+
+    /**
+     * Get sanitized User-Agent string from server environment.
+     *
+     * @return string
+     */
+    public static function getUserAgent() {
+        return isset($_SERVER['HTTP_USER_AGENT'])
+            ? sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT']))
+            : '';
     }
 
     /**

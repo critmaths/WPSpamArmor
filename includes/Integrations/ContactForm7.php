@@ -57,17 +57,17 @@ class ContactForm7 implements IntegrationInterface {
 
         $contentParts = [];
         foreach ($submittedData as $key => $val) {
-            if (is_string($val) && strpos($key, 'spm_') === false && strpos($key, '_wpcf7') === false) {
-                $contentParts[] = $val;
+            if (is_string($val) && strpos($key, 'spamarmor_') === false && strpos($key, '_wpcf7') === false) {
+                $contentParts[] = sanitize_text_field($val);
             }
         }
 
         $engine = Plugin::instance()->getProtectionEngine();
         $context = [
-            'post'       => $_POST,
+            'post'       => wp_unslash($_POST),
             'form_type'  => 'cf7',
             'ip'         => TokenManager::getClientIp(),
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+            'user_agent' => TokenManager::getUserAgent(),
             'content'    => implode("\n", $contentParts),
             'user_id'    => get_current_user_id()
         ];

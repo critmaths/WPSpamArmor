@@ -64,11 +64,11 @@ class WordPressComments implements IntegrationInterface {
 
         $engine = Plugin::instance()->getProtectionEngine();
         $context = [
-            'post'       => $_POST,
+            'post'       => wp_unslash($_POST),
             'form_type'  => 'comment',
             'ip'         => TokenManager::getClientIp(),
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
-            'content'    => $commentdata['comment_content'] ?? '',
+            'user_agent' => TokenManager::getUserAgent(),
+            'content'    => sanitize_textarea_field($commentdata['comment_content'] ?? ''),
             'user_id'    => get_current_user_id()
         ];
 
@@ -76,17 +76,17 @@ class WordPressComments implements IntegrationInterface {
 
         if ($verdict['is_spam']) {
             $action = $verdict['action'];
-            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Suspicious submission pattern.', 'spamarmor');
+            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Suspicious submission pattern.', 'spamarmor-open-source-spam-bot-protection');
 
             if ($action === 'block') {
                 wp_die(
                     sprintf(
                         '<h1>%s</h1><p>%s</p><p><a href="javascript:history.back()">&laquo; %s</a></p>',
-                        esc_html__('Submission Blocked by SpamArmor', 'spamarmor'),
-                        esc_html(sprintf(__('Your comment was flagged by local spam defense (%s). If this was a mistake, please go back and try again.', 'spamarmor'), $reason)),
-                        esc_html__('Back', 'spamarmor')
+                        esc_html__('Submission Blocked by SpamArmor', 'spamarmor-open-source-spam-bot-protection'),
+                        esc_html(sprintf(__('Your comment was flagged by local spam defense (%s). If this was a mistake, please go back and try again.', 'spamarmor-open-source-spam-bot-protection'), $reason)),
+                        esc_html__('Back', 'spamarmor-open-source-spam-bot-protection')
                     ),
-                    esc_html__('Spam Blocked', 'spamarmor'),
+                    esc_html__('Spam Blocked', 'spamarmor-open-source-spam-bot-protection'),
                     ['response' => 403, 'back_link' => true]
                 );
             }

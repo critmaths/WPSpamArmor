@@ -50,18 +50,19 @@ class GravityForms implements IntegrationInterface {
         $form = $validation_result['form'];
 
         $contentParts = [];
-        foreach ($_POST as $k => $v) {
+        $unslashedPost = wp_unslash($_POST);
+        foreach ($unslashedPost as $k => $v) {
             if (is_string($v) && strpos($k, 'input_') === 0) {
-                $contentParts[] = $v;
+                $contentParts[] = sanitize_text_field($v);
             }
         }
 
         $engine = Plugin::instance()->getProtectionEngine();
         $context = [
-            'post'       => $_POST,
+            'post'       => $unslashedPost,
             'form_type'  => 'gravityforms',
             'ip'         => TokenManager::getClientIp(),
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+            'user_agent' => TokenManager::getUserAgent(),
             'content'    => implode("\n", $contentParts),
             'user_id'    => get_current_user_id()
         ];
@@ -69,14 +70,14 @@ class GravityForms implements IntegrationInterface {
         $verdict = $engine->evaluate($context);
 
         if ($verdict['is_spam']) {
-            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Submission flagged as spam.', 'spamarmor');
+            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Submission flagged as spam.', 'spamarmor-open-source-spam-bot-protection');
             $validation_result['is_valid'] = false;
 
             // Flag first field with error message
             if (!empty($form['fields'])) {
                 foreach ($form['fields'] as &$field) {
                     $field->failed_validation = true;
-                    $field->validation_message = sprintf(__('SpamArmor: %s', 'spamarmor'), esc_html($reason));
+                    $field->validation_message = sprintf(__('SpamArmor: %s', 'spamarmor-open-source-spam-bot-protection'), esc_html($reason));
                     break;
                 }
             }

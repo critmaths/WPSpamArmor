@@ -1,6 +1,7 @@
 /**
  * SpamArmor Frontend Deceptive Honeypot & Shield Styling
  */
+.spamarmor-shield-container,
 .spm-shield-container {
     position: absolute !important;
     left: -9999px !important;
@@ -18,6 +19,7 @@
     z-index: -9999 !important;
 }
 
+.spamarmor-shield-container input,
 .spm-shield-container input {
     display: block !important;
     width: 0 !important;

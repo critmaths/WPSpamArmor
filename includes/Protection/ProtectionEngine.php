@@ -116,7 +116,7 @@ class ProtectionEngine {
                 'is_spam' => false,
                 'score'   => 0,
                 'action'  => 'allow',
-                'reasons' => [__('Whitelisted user or IP address.', 'spamarmor')],
+                'reasons' => [__('Whitelisted user or IP address.', 'spamarmor-open-source-spam-bot-protection')],
                 'rules'   => []
             ];
         }

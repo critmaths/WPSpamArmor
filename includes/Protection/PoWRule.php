@@ -29,15 +29,15 @@ class PoWRule implements RuleInterface {
 
     public function check(array $context) {
         $post = $context['post'] ?? [];
-        $token = $post['spm_pow_token'] ?? '';
-        $nonce = $post['spm_pow_nonce'] ?? '';
+        $token = $post['spamarmor_pow_token'] ?? ($post['spm_pow_token'] ?? '');
+        $nonce = $post['spamarmor_pow_nonce'] ?? ($post['spm_pow_nonce'] ?? '');
 
         if (empty($token) || empty($nonce)) {
             return [
                 'passed'   => false,
                 'score'    => 80,
                 'critical' => false,
-                'reason'   => __('Missing JavaScript Proof-of-Work verification (headless bot or JS disabled).', 'spamarmor')
+                'reason'   => __('Missing JavaScript Proof-of-Work verification (headless bot or JS disabled).', 'spamarmor-open-source-spam-bot-protection')
             ];
         }
 
@@ -47,7 +47,7 @@ class PoWRule implements RuleInterface {
                 'passed'   => false,
                 'score'    => 95,
                 'critical' => true,
-                'reason'   => __('Invalid or forged Proof-of-Work solution.', 'spamarmor')
+                'reason'   => __('Invalid or forged Proof-of-Work solution.', 'spamarmor-open-source-spam-bot-protection')
             ];
         }
 
