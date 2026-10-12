@@ -1,6 +1,7 @@
 # 🛡️ SpamArmor - Modern Open Source Spam & Bot Protection for WordPress
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](LICENSE)
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-ea4aaa?style=flat-square&logo=github)](https://github.com/sponsors/critmaths)
 [![WordPress](https://img.shields.io/badge/WordPress-5.8%2B-21759b.svg)](https://wordpress.org)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-777bb4.svg)](https://php.net)
 [![Zero Cloud](https://img.shields.io/badge/Cloud%20Dependencies-0%25%20(100%25%20Local)-brightgreen.svg)]()
@@ -130,5 +131,14 @@ add_action('plugins_loaded', function() {
 ---
 
 ## 📄 License
-
+ 
 SpamArmor is open-source software licensed under the [GNU General Public License v2.0 or later](LICENSE).
+
+---
+
+## 💖 Sponsoring & Support
+
+If SpamArmor keeps your WordPress sites clean of spam and bot traffic, please consider supporting continued open-source development:
+
+👉 **[Become a GitHub Sponsor](https://github.com/sponsors/critmaths)**
+
