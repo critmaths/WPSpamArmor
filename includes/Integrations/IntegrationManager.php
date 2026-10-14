@@ -1,5 +1,5 @@
 <?php
-namespace SpamArmor\Integrations;
+namespace CyberArmor\Integrations;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {

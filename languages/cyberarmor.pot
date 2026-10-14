@@ -1,33 +1,33 @@
-# Copyright (C) 2026 SpamArmor Community
+# Copyright (C) 2026 CyberArmor Community
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: SpamArmor 1.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/critmaths/WPSpamArmor/issues\n"
+"Project-Id-Version: CyberArmor 1.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/critmaths/cyberarmor/issues\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-24T21:20:00+00:00\n"
+"POT-Creation-Date: 2026-10-14T12:00:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
-"X-Domain: spamarmor-open-source-spam-bot-protection\n"
+"X-Domain: cyberarmor\n"
 
 #. Plugin Name of the plugin
-msgid "SpamArmor - Open Source Spam & Bot Protection"
+msgid "CyberArmor - Open Source Security, Firewall & Anti-Spam"
 msgstr ""
 
 #. Plugin URI of the plugin
-msgid "https://github.com/critmaths/WPSpamArmor/"
+msgid "https://github.com/critmaths/cyberarmor/"
 msgstr ""
 
 #. Description of the plugin
-msgid "Next-generation, privacy-first open-source spam and bot protection for WordPress. Zero subscriptions, zero external cloud dependencies."
+msgid "Enterprise-grade, privacy-first open-source security, Layer-7 Web Application Firewall (WAF), core hardening, and bot & spam defense for WordPress."
 msgstr ""
 
 #. Author of the plugin
-msgid "SpamArmor Community"
+msgid "CyberArmor Community"
 msgstr ""
 
 #. Author URI of the plugin

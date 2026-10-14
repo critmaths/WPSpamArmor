@@ -1,5 +1,5 @@
 <?php
-namespace SpamArmor\Core;
+namespace CyberArmor\Core;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 
 /**
  * Handles cryptographic HMAC tokens, Proof-of-Work challenge issuance & verification,
- * dynamic honeypot field names, and IP privacy masking.
+ * dynamic honeypot field names, and IP privacy masking for CyberArmor.
  */
 class TokenManager {
     /**
@@ -24,23 +24,23 @@ class TokenManager {
             return AUTH_KEY;
         }
         // Fallback site salt stored in options if salts are undefined
-        $salt = get_option('spamarmor_fallback_salt');
+        $salt = get_option('cyberarmor_fallback_salt');
         if (!$salt) {
-            $salt = wp_generate_password(64, true, true);
-            update_option('spamarmor_fallback_salt', $salt);
+            $legacySalt = get_option('spamarmor_fallback_salt');
+            $salt = $legacySalt ?: wp_generate_password(64, true, true);
+            update_option('cyberarmor_fallback_salt', $salt);
         }
         return $salt;
     }
 
     /**
      * Get a deterministic, deceptive honeypot field name for this installation.
-     * Changes periodically (e.g. weekly or monthly based on secret hash) or remains stable per site salt.
      *
      * @return string
      */
     public static function getHoneypotFieldName() {
-        $hash = substr(hash_hmac('sha256', 'honeypot_field_v1', self::getSecret()), 0, 10);
-        return 'spamarmor_hp_' . $hash;
+        $hash = substr(hash_hmac('sha256', 'honeypot_field_v2', self::getSecret()), 0, 10);
+        return 'cyberarmor_hp_' . $hash;
     }
 
     /**

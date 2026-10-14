@@ -1,12 +1,14 @@
 /**
- * SpamArmor Admin Dashboard & Settings Styling
+ * CyberArmor Admin Dashboard & Settings Styling
  */
+.cyberarmor-admin-wrap,
 .spamarmor-admin-wrap {
     max-width: 1200px;
     margin: 20px 20px 20px 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
+.cyberarmor-header,
 .spamarmor-header {
     display: flex;
     justify-content: space-between;
@@ -19,12 +21,14 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
+.cyberarmor-branding,
 .spamarmor-branding {
     display: flex;
     align-items: center;
     gap: 16px;
 }
 
+.cyberarmor-logo-icon,
 .spamarmor-logo-icon {
     font-size: 38px;
     width: 38px;
@@ -32,6 +36,7 @@
     color: #2563eb;
 }
 
+.cyberarmor-header h1,
 .spamarmor-header h1 {
     font-size: 24px;
     font-weight: 700;
@@ -42,6 +47,7 @@
     gap: 10px;
 }
 
+.cyberarmor-badge-version,
 .spamarmor-badge-version {
     font-size: 12px;
     background: #e0e7ff;
@@ -51,12 +57,14 @@
     font-weight: 600;
 }
 
+.cyberarmor-subtitle,
 .spamarmor-subtitle {
     margin: 4px 0 0 0;
     color: #64748b;
     font-size: 14px;
 }
 
+.cyberarmor-status-pill,
 .spamarmor-status-pill {
     display: inline-flex;
     align-items: center;
@@ -70,6 +78,7 @@
     font-size: 13px;
 }
 
+.cyberarmor-status-dot.online,
 .spamarmor-status-dot.online {
     width: 8px;
     height: 8px;
@@ -79,6 +88,7 @@
 }
 
 /* Stat Cards Grid */
+.cyberarmor-cards-grid,
 .spamarmor-cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -86,6 +96,7 @@
     margin-bottom: 24px;
 }
 
+.cyberarmor-card,
 .spamarmor-card {
     background: #ffffff;
     border: 1px solid #e2e8f0;
@@ -97,6 +108,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
+.cyberarmor-card-icon,
 .spamarmor-card-icon {
     width: 48px;
     height: 48px;
@@ -106,28 +118,33 @@
     justify-content: center;
 }
 
+.cyberarmor-card-icon .dashicons,
 .spamarmor-card-icon .dashicons {
     font-size: 24px;
     width: 24px;
     height: 24px;
 }
 
-.spamarmor-card-icon.blue { background: #eff6ff; color: #2563eb; }
-.spamarmor-card-icon.green { background: #f0fdf4; color: #16a34a; }
-.spamarmor-card-icon.purple { background: #faf5ff; color: #9333ea; }
-.spamarmor-card-icon.amber { background: #fffbeb; color: #d97706; }
+.cyberarmor-card-icon.blue, .spamarmor-card-icon.blue { background: #eff6ff; color: #2563eb; }
+.cyberarmor-card-icon.red, .spamarmor-card-icon.red { background: #fef2f2; color: #dc2626; }
+.cyberarmor-card-icon.green, .spamarmor-card-icon.green { background: #f0fdf4; color: #16a34a; }
+.cyberarmor-card-icon.purple, .spamarmor-card-icon.purple { background: #faf5ff; color: #9333ea; }
+.cyberarmor-card-icon.amber, .spamarmor-card-icon.amber { background: #fffbeb; color: #d97706; }
 
+.cyberarmor-card-content,
 .spamarmor-card-content {
     display: flex;
     flex-direction: column;
 }
 
+.cyberarmor-card-label,
 .spamarmor-card-label {
     font-size: 13px;
     color: #64748b;
     font-weight: 500;
 }
 
+.cyberarmor-card-value,
 .spamarmor-card-value {
     font-size: 24px;
     font-weight: 700;
@@ -137,6 +154,7 @@
 }
 
 /* Panels */
+.cyberarmor-panel,
 .spamarmor-panel {
     background: #ffffff;
     border: 1px solid #e2e8f0;
@@ -146,6 +164,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
+.cyberarmor-panel h2,
 .spamarmor-panel h2 {
     font-size: 17px;
     font-weight: 600;
@@ -166,6 +185,7 @@
 }
 
 /* 2-Column Grid */
+.cyberarmor-grid-2col,
 .spamarmor-grid-2col {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -174,12 +194,14 @@
 }
 
 @media (max-width: 860px) {
+    .cyberarmor-grid-2col,
     .spamarmor-grid-2col {
         grid-template-columns: 1fr;
     }
 }
 
 /* Chart */
+.cyberarmor-bar-chart,
 .spamarmor-bar-chart {
     display: flex;
     align-items: flex-end;
@@ -189,6 +211,7 @@
     border-bottom: 1px solid #e2e8f0;
 }
 
+.cyberarmor-chart-col,
 .spamarmor-chart-col {
     flex: 1;
     display: flex;
@@ -197,6 +220,7 @@
     height: 100%;
 }
 
+.cyberarmor-bars-wrapper,
 .spamarmor-bars-wrapper {
     flex: 1;
     width: 28px;
@@ -207,24 +231,28 @@
     overflow: hidden;
 }
 
+.cyberarmor-bar-clean,
 .spamarmor-bar-clean {
     background: #10b981;
     width: 100%;
     transition: height 0.3s ease;
 }
 
+.cyberarmor-bar-spam,
 .spamarmor-bar-spam {
     background: #ef4444;
     width: 100%;
     transition: height 0.3s ease;
 }
 
+.cyberarmor-chart-label,
 .spamarmor-chart-label {
     font-size: 11px;
     color: #64748b;
     margin-top: 8px;
 }
 
+.cyberarmor-chart-legend,
 .spamarmor-chart-legend {
     display: flex;
     gap: 18px;
@@ -248,12 +276,14 @@
 .legend-dot.clean { background: #10b981; }
 
 /* Layers List */
+.cyberarmor-layers-list,
 .spamarmor-layers-list {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
+.cyberarmor-layers-list li,
 .spamarmor-layers-list li {
     display: flex;
     justify-content: space-between;
@@ -262,6 +292,7 @@
     border-bottom: 1px solid #f1f5f9;
 }
 
+.cyberarmor-layers-list li:last-child,
 .spamarmor-layers-list li:last-child {
     border-bottom: none;
 }
@@ -317,12 +348,14 @@
     color: #b45309;
 }
 
+.cyberarmor-empty-state,
 .spamarmor-empty-state {
     text-align: center;
     padding: 40px 20px;
     color: #64748b;
 }
 
+.cyberarmor-empty-state .dashicons,
 .spamarmor-empty-state .dashicons {
     font-size: 40px;
     width: 40px;
@@ -331,6 +364,7 @@
     margin-bottom: 8px;
 }
 
+.cyberarmor-filter-bar,
 .spamarmor-filter-bar {
     background: #ffffff;
     border: 1px solid #e2e8f0;

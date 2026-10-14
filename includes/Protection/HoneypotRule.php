@@ -1,8 +1,8 @@
 <?php
-namespace SpamArmor\Protection;
+namespace CyberArmor\Protection;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\TokenManager;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\TokenManager;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -37,19 +37,23 @@ class HoneypotRule implements RuleInterface {
                 'passed'   => false,
                 'score'    => 100,
                 'critical' => true,
-                'reason'   => sprintf(__('Honeypot field "%s" was filled with: "%s"', 'spamarmor-open-source-spam-bot-protection'), $honeypotKey, substr(sanitize_text_field($post[$honeypotKey]), 0, 30))
+                'reason'   => sprintf(__('Honeypot field "%s" was filled with: "%s"', 'cyberarmor'), $honeypotKey, substr(sanitize_text_field($post[$honeypotKey]), 0, 30))
             ];
         }
 
         // 2. Generic decoy fields (e.g. deceptive fake URL or secondary honeypot)
-        $decoys = ['spamarmor_decoy_website', 'spamarmor_hp_check', 'spm_decoy_website', 'spm_hp_check'];
+        $decoys = [
+            'cyberarmor_decoy_website', 'cyberarmor_hp_check',
+            'spamarmor_decoy_website', 'spamarmor_hp_check',
+            'spm_decoy_website', 'spm_hp_check'
+        ];
         foreach ($decoys as $decoy) {
             if (isset($post[$decoy]) && trim((string)$post[$decoy]) !== '') {
                 return [
                     'passed'   => false,
                     'score'    => 100,
                     'critical' => true,
-                    'reason'   => sprintf(__('Secondary honeypot decoy "%s" was filled.', 'spamarmor-open-source-spam-bot-protection'), $decoy)
+                    'reason'   => sprintf(__('Secondary honeypot decoy "%s" was filled.', 'cyberarmor'), $decoy)
                 ];
             }
         }

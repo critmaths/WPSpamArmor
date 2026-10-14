@@ -1,8 +1,8 @@
 <?php
-namespace SpamArmor\Protection;
+namespace CyberArmor\Protection;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\TokenManager;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\TokenManager;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -29,15 +29,15 @@ class PoWRule implements RuleInterface {
 
     public function check(array $context) {
         $post = $context['post'] ?? [];
-        $token = $post['spamarmor_pow_token'] ?? ($post['spm_pow_token'] ?? '');
-        $nonce = $post['spamarmor_pow_nonce'] ?? ($post['spm_pow_nonce'] ?? '');
+        $token = $post['cyberarmor_pow_token'] ?? ($post['spamarmor_pow_token'] ?? ($post['spm_pow_token'] ?? ''));
+        $nonce = $post['cyberarmor_pow_nonce'] ?? ($post['spamarmor_pow_nonce'] ?? ($post['spm_pow_nonce'] ?? ''));
 
         if (empty($token) || empty($nonce)) {
             return [
                 'passed'   => false,
                 'score'    => 80,
                 'critical' => false,
-                'reason'   => __('Missing JavaScript Proof-of-Work verification (headless bot or JS disabled).', 'spamarmor-open-source-spam-bot-protection')
+                'reason'   => __('Missing JavaScript Proof-of-Work verification (headless bot or JS disabled).', 'cyberarmor')
             ];
         }
 
@@ -47,7 +47,7 @@ class PoWRule implements RuleInterface {
                 'passed'   => false,
                 'score'    => 95,
                 'critical' => true,
-                'reason'   => __('Invalid or forged Proof-of-Work solution.', 'spamarmor-open-source-spam-bot-protection')
+                'reason'   => __('Invalid or forged Proof-of-Work solution.', 'cyberarmor')
             ];
         }
 

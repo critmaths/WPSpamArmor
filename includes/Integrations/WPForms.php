@@ -1,9 +1,9 @@
 <?php
-namespace SpamArmor\Integrations;
+namespace CyberArmor\Integrations;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\Plugin;
-use SpamArmor\Core\TokenManager;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\Plugin;
+use CyberArmor\Core\TokenManager;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -70,11 +70,11 @@ class WPForms implements IntegrationInterface {
 
         if ($verdict['is_spam']) {
             $formId = absint($form_data['id'] ?? 0);
-            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Spam activity detected.', 'spamarmor-open-source-spam-bot-protection');
+            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Spam activity detected.', 'cyberarmor');
 
             if (function_exists('wpforms') && isset(wpforms()->process)) {
                 wpforms()->process->errors[$formId]['header'] = sprintf(
-                    __('Spam protection alert: %s', 'spamarmor-open-source-spam-bot-protection'),
+                    __('Spam protection alert: %s', 'cyberarmor'),
                     esc_html($reason)
                 );
             }

@@ -1,8 +1,8 @@
 <?php
-namespace SpamArmor\Rest;
+namespace CyberArmor\Rest;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\TokenManager;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\TokenManager;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
  * Provides fresh HMAC timestamp tokens and micro-PoW challenges for pages served from static full-page cache.
  */
 class TokenController {
-    const NAMESPACE = 'spamarmor/v1';
+    const NAMESPACE = 'cyberarmor/v1';
 
     /**
      * Register REST API routes.
@@ -46,7 +46,7 @@ class TokenController {
         ];
 
         $response = new \WP_REST_Response($data, 200);
-        // Explicitly instruct proxies and CDNs not to cache this dynamic token endpoint
+        // Explicitly instruct proxies and CDNs not to cache dynamic token endpoint
         $response->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
         $response->header('Pragma', 'no-cache');
 

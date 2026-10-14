@@ -1,9 +1,9 @@
 <?php
-namespace SpamArmor\Integrations;
+namespace CyberArmor\Integrations;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\Plugin;
-use SpamArmor\Core\TokenManager;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\Plugin;
+use CyberArmor\Core\TokenManager;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -76,17 +76,17 @@ class WordPressComments implements IntegrationInterface {
 
         if ($verdict['is_spam']) {
             $action = $verdict['action'];
-            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Suspicious submission pattern.', 'spamarmor-open-source-spam-bot-protection');
+            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Suspicious submission pattern.', 'cyberarmor');
 
             if ($action === 'block') {
                 wp_die(
                     sprintf(
                         '<h1>%s</h1><p>%s</p><p><a href="javascript:history.back()">&laquo; %s</a></p>',
-                        esc_html__('Submission Blocked by SpamArmor', 'spamarmor-open-source-spam-bot-protection'),
-                        esc_html(sprintf(__('Your comment was flagged by local spam defense (%s). If this was a mistake, please go back and try again.', 'spamarmor-open-source-spam-bot-protection'), $reason)),
-                        esc_html__('Back', 'spamarmor-open-source-spam-bot-protection')
+                        esc_html__('Submission Blocked by SpamArmor', 'cyberarmor'),
+                        esc_html(sprintf(__('Your comment was flagged by local spam defense (%s). If this was a mistake, please go back and try again.', 'cyberarmor'), $reason)),
+                        esc_html__('Back', 'cyberarmor')
                     ),
-                    esc_html__('Spam Blocked', 'spamarmor-open-source-spam-bot-protection'),
+                    esc_html__('Spam Blocked', 'cyberarmor'),
                     ['response' => 403, 'back_link' => true]
                 );
             }

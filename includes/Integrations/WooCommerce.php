@@ -1,9 +1,9 @@
 <?php
-namespace SpamArmor\Integrations;
+namespace CyberArmor\Integrations;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\Plugin;
-use SpamArmor\Core\TokenManager;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\Plugin;
+use CyberArmor\Core\TokenManager;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -70,8 +70,8 @@ class WooCommerce implements IntegrationInterface {
         $verdict = $engine->evaluate($context);
 
         if ($verdict['is_spam']) {
-            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Spam activity detected.', 'spamarmor-open-source-spam-bot-protection');
-            $errors->add('spamarmor_blocked', sprintf(__('SpamArmor: %s', 'spamarmor-open-source-spam-bot-protection'), esc_html($reason)));
+            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Spam activity detected.', 'cyberarmor');
+            $errors->add('spamarmor_blocked', sprintf(__('SpamArmor: %s', 'cyberarmor'), esc_html($reason)));
         }
 
         return $errors;

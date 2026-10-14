@@ -1,10 +1,10 @@
 <?php
-namespace SpamArmor\Protection;
+namespace CyberArmor\Protection;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\TokenManager;
-use SpamArmor\Database\LogRepository;
-use SpamArmor\Database\StatsRepository;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\TokenManager;
+use CyberArmor\Database\LogRepository;
+use CyberArmor\Database\StatsRepository;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -116,12 +116,12 @@ class ProtectionEngine {
                 'is_spam' => false,
                 'score'   => 0,
                 'action'  => 'allow',
-                'reasons' => [__('Whitelisted user or IP address.', 'spamarmor-open-source-spam-bot-protection')],
+                'reasons' => [__('Whitelisted user or IP address.', 'cyberarmor')],
                 'rules'   => []
             ];
         }
 
-        do_action('spamarmor_before_evaluate', $context);
+        do_action('cyberarmor_before_evaluate', $context);
 
         $totalScore = 0;
         $reasons = [];
@@ -167,10 +167,10 @@ class ProtectionEngine {
                     'content'   => substr(sanitize_textarea_field($context['content'] ?? ''), 0, 500)
                 ]);
             }
-            do_action('spamarmor_spam_detected', $context, $totalScore, $reasons);
+            do_action('cyberarmor_spam_detected', $context, $totalScore, $reasons);
         } else {
             StatsRepository::recordCleanEvent($context['form_type'] ?? 'unknown');
-            do_action('spamarmor_clean_submission', $context);
+            do_action('cyberarmor_clean_submission', $context);
         }
 
         return [

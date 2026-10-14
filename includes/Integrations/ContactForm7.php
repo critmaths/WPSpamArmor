@@ -1,9 +1,9 @@
 <?php
-namespace SpamArmor\Integrations;
+namespace CyberArmor\Integrations;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\Plugin;
-use SpamArmor\Core\TokenManager;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\Plugin;
+use CyberArmor\Core\TokenManager;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {

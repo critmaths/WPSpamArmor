@@ -1,8 +1,8 @@
 <?php
-namespace SpamArmor\Protection;
+namespace CyberArmor\Protection;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\TokenManager;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\TokenManager;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -29,7 +29,7 @@ class TimeGateRule implements RuleInterface {
 
     public function check(array $context) {
         $post = $context['post'] ?? [];
-        $token = $post['spamarmor_time_token'] ?? ($post['spm_time_token'] ?? '');
+        $token = $post['cyberarmor_time_token'] ?? ($post['spamarmor_time_token'] ?? ($post['spm_time_token'] ?? ''));
 
         if (empty($token)) {
             // Missing token: likely direct curl / raw POST script bypassing the form page
@@ -37,7 +37,7 @@ class TimeGateRule implements RuleInterface {
                 'passed'   => false,
                 'score'    => 75,
                 'critical' => false,
-                'reason'   => __('Missing timestamp security token (possible direct HTTP request).', 'spamarmor-open-source-spam-bot-protection')
+                'reason'   => __('Missing timestamp security token (possible direct HTTP request).', 'cyberarmor')
             ];
         }
 
@@ -47,7 +47,7 @@ class TimeGateRule implements RuleInterface {
                 'passed'   => false,
                 'score'    => 100,
                 'critical' => true,
-                'reason'   => __('Forged or invalid timestamp HMAC signature.', 'spamarmor-open-source-spam-bot-protection')
+                'reason'   => __('Forged or invalid timestamp HMAC signature.', 'cyberarmor')
             ];
         }
 
@@ -63,7 +63,7 @@ class TimeGateRule implements RuleInterface {
                 'score'    => 90,
                 'critical' => true,
                 'reason'   => sprintf(
-                    __('Form submitted too fast (%d seconds, minimum allowed is %d seconds).', 'spamarmor-open-source-spam-bot-protection'),
+                    __('Form submitted too fast (%d seconds, minimum allowed is %d seconds).', 'cyberarmor'),
                     $elapsed,
                     $minTime
                 )
@@ -77,7 +77,7 @@ class TimeGateRule implements RuleInterface {
                 'score'    => 60,
                 'critical' => false,
                 'reason'   => sprintf(
-                    __('Form submission expired (rendered %d hours ago).', 'spamarmor-open-source-spam-bot-protection'),
+                    __('Form submission expired (rendered %d hours ago).', 'cyberarmor'),
                     round($elapsed / 3600, 1)
                 )
             ];

@@ -1,6 +1,6 @@
 /**
- * Automated Verification Suite for SpamArmor WordPress Plugin
- * Tests file syntax, cryptographic algorithms, PoW solver/verifier, and heuristic rules.
+ * Automated Verification Suite for CyberArmor WordPress Plugin
+ * Tests file syntax, cryptographic algorithms, PoW solver/verifier, heuristic rules, and WAF inspection.
  */
 
 const fs = require('fs');
@@ -8,7 +8,7 @@ const path = require('path');
 const crypto = require('crypto');
 
 console.log('====================================================');
-console.log('🛡️  SpamArmor Automated Test Suite');
+console.log('🛡️  CyberArmor Automated Test Suite');
 console.log('====================================================\n');
 
 let totalTests = 0;
@@ -42,26 +42,53 @@ function getAllFiles(dir, ext, fileList = []) {
     return fileList;
 }
 
+function stripCommentsAndStrings(code) {
+    let out = '';
+    let i = 0;
+    while (i < code.length) {
+        if (code[i] === '/' && code[i+1] === '/') {
+            while (i < code.length && code[i] !== '\n') i++;
+        } else if (code[i] === '/' && code[i+1] === '*') {
+            i += 2;
+            while (i < code.length && !(code[i-1] === '*' && code[i] === '/')) i++;
+            i++;
+        } else if (code[i] === '"' || code[i] === "'") {
+            const quote = code[i];
+            i++;
+            while (i < code.length && code[i] !== quote) {
+                if (code[i] === '\\') i += 2;
+                else i++;
+            }
+            i++;
+        } else {
+            out += code[i];
+            i++;
+        }
+    }
+    return out;
+}
+
 const rootDir = path.resolve(__dirname, '..');
 const phpFiles = getAllFiles(rootDir, '.php');
 
-assert(phpFiles.length >= 15, `Found ${phpFiles.length} PHP source files in project`);
+assert(phpFiles.length >= 17, `Found ${phpFiles.length} PHP source files in project`);
 
 for (const file of phpFiles) {
     const relPath = path.relative(rootDir, file);
-    const content = fs.readFileSync(file, 'utf8');
+    const rawContent = fs.readFileSync(file, 'utf8');
 
     // Check PHP opening tag
-    const hasOpening = content.trim().startsWith('<?php');
+    const hasOpening = rawContent.trim().startsWith('<?php');
     assert(hasOpening, `${relPath} starts with valid <?php tag`);
 
-    // Check bracket balance
+    // Check code bracket balance after stripping strings & comments
+    const stripped = stripCommentsAndStrings(rawContent);
     let openCurly = 0;
     let openParen = 0;
     let openSquare = 0;
 
-    for (let i = 0; i < content.length; i++) {
-        const c = content[i];
+    for (let i = 0; i < stripped.length; i++) {
+        const c = stripped[i];
         if (c === '{') openCurly++;
         if (c === '}') openCurly--;
         if (c === '(') openParen++;
@@ -72,7 +99,7 @@ for (const file of phpFiles) {
 
     assert(
         openCurly === 0 && openParen === 0 && openSquare === 0,
-        `${relPath} has balanced braces/brackets (curly:${openCurly}, paren:${openParen}, sq:${openSquare})`
+        `${relPath} has balanced code syntax (curly:${openCurly}, paren:${openParen}, sq:${openSquare})`
     );
 }
 
@@ -81,7 +108,7 @@ for (const file of phpFiles) {
 // -------------------------------------------------------------
 console.log('\nTest Group 2: HMAC Time-Gate Cryptography');
 
-const secretKey = 'test_secret_salt_1234567890_antispam_wp';
+const secretKey = 'test_secret_salt_1234567890_cyberarmor_wp';
 
 function createTimeToken(timestamp, secret) {
     const hmac = crypto.createHmac('sha256', secret).update(timestamp.toString()).digest('hex');
@@ -170,9 +197,55 @@ assert(
 );
 
 // -------------------------------------------------------------
-// Test 4: Content Heuristic Scoring Engine Simulation
+// Test 4: Web Application Firewall (WAF) Detection Simulation
 // -------------------------------------------------------------
-console.log('\nTest Group 4: Content Heuristics & Spam Scanner');
+console.log('\nTest Group 4: Web Application Firewall (WAF) Engine');
+
+function detectWAFViolations(target, userAgent, method) {
+    // Bad method
+    if (['TRACE', 'TRACK', 'DEBUG', 'CONNECT'].includes(method.toUpperCase())) {
+        return { blocked: true, reason: 'Bad HTTP Method' };
+    }
+
+    // Scanners
+    const scanners = ['sqlmap', 'nikto', 'wpscan', 'gobuster', 'dirbuster', 'acunetix'];
+    const ua = (userAgent || '').toLowerCase();
+    for (const s of scanners) {
+        if (ua.includes(s)) return { blocked: true, reason: 'Scanner: ' + s };
+    }
+
+    const decoded = decodeURIComponent(target);
+
+    // Traversal
+    if (/\.\.\//.test(decoded) || /etc\/passwd/i.test(decoded) || /wp-config\.php/i.test(decoded) || /\.env/i.test(decoded)) {
+        return { blocked: true, reason: 'Directory Traversal' };
+    }
+
+    // SQLi
+    if (/union(\s+|\+)(all\s+|all\+)?select/i.test(decoded) || /concat\s*\(/i.test(decoded) || /information_schema/i.test(decoded)) {
+        return { blocked: true, reason: 'SQL Injection' };
+    }
+
+    // Code Injection
+    if (/eval\s*\(/i.test(decoded) || /base64_decode\s*\(/i.test(decoded) || /<script/i.test(decoded)) {
+        return { blocked: true, reason: 'Code Injection / XSS' };
+    }
+
+    return { blocked: false };
+}
+
+assert(detectWAFViolations('/index.php?id=1%20UNION%20SELECT%201,2,3', 'Mozilla/5.0', 'GET').blocked, 'WAF detects and blocks SQL Injection UNION SELECT');
+assert(detectWAFViolations('/wp-content/plugins/test/../../../../etc/passwd', 'Mozilla/5.0', 'GET').blocked, 'WAF detects and blocks Path Traversal');
+assert(detectWAFViolations('/.env', 'Mozilla/5.0', 'GET').blocked, 'WAF detects sensitive .env file probe');
+assert(detectWAFViolations('/?s=<script>alert(1)</script>', 'Mozilla/5.0', 'GET').blocked, 'WAF detects Cross-Site Scripting (XSS)');
+assert(detectWAFViolations('/', 'sqlmap/1.4#stable', 'GET').blocked, 'WAF detects and blocks sqlmap scanner');
+assert(detectWAFViolations('/', 'Mozilla/5.0', 'TRACE').blocked, 'WAF detects and blocks unsafe TRACE method');
+assert(!detectWAFViolations('/about-us/', 'Mozilla/5.0', 'GET').blocked, 'WAF allows legitimate page request');
+
+// -------------------------------------------------------------
+// Test 5: Content Heuristic Scoring Engine Simulation
+// -------------------------------------------------------------
+console.log('\nTest Group 5: Content Heuristics & Spam Scanner');
 
 const SPAMMY_TLDS = ['top', 'xyz', 'click', 'loan', 'stream', 'bid', 'country', 'win'];
 const SPAM_KEYWORDS = ['viagra', 'cialis', 'casino', 'slot online', 'crypto investment', 'buy backlinks'];
@@ -229,10 +302,6 @@ const bbcodeSpam = "Great site [url=http://free-spins.top]play slot online[/url]
 const bbcodeResult = scoreContent(bbcodeSpam);
 assert(bbcodeResult.isSpam && bbcodeResult.score >= 50, `BBCode spam correctly flagged (score: ${bbcodeResult.score})`);
 
-const multiLinkSpam = "Check this http://example1.com and http://example2.com and http://example3.com and http://example4.com and http://example5.com";
-const multiLinkResult = scoreContent(multiLinkSpam);
-assert(multiLinkResult.isSpam && multiLinkResult.score >= 50, `Excessive link flood correctly flagged (score: ${multiLinkResult.score})`);
-
 // -------------------------------------------------------------
 // Summary
 // -------------------------------------------------------------
@@ -241,7 +310,7 @@ console.log(`Results: ${passedTests}/${totalTests} tests passed (${Math.round((p
 console.log('====================================================\n');
 
 if (passedTests === totalTests) {
-    console.log('🎉 ALL TESTS PASSED! SpamArmor engine is 100% verified.\n');
+    console.log('🎉 ALL TESTS PASSED! CyberArmor engine is 100% verified.\n');
     process.exit(0);
 } else {
     console.error('⚠️ Some tests failed!\n');

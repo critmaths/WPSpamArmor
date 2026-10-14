@@ -1,5 +1,5 @@
 <?php
-namespace SpamArmor\Core;
+namespace CyberArmor\Core;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -7,13 +7,13 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Lightweight PSR-4 autoloader for SpamArmor namespace.
+ * Lightweight PSR-4 autoloader for CyberArmor namespace.
  */
 class Autoloader {
     /**
      * Namespace prefix.
      */
-    const PREFIX = 'SpamArmor\\';
+    const PREFIX = 'CyberArmor\\';
 
     /**
      * Register autoloader with SPL stack.
@@ -33,7 +33,7 @@ class Autoloader {
         }
 
         $relativeClass = substr($class, strlen(self::PREFIX));
-        $file = SPAMARMOR_PLUGIN_DIR . 'includes/' . str_replace('\\', '/', $relativeClass) . '.php';
+        $file = CYBERARMOR_PLUGIN_DIR . 'includes/' . str_replace('\\', '/', $relativeClass) . '.php';
 
         if (file_exists($file)) {
             require_once $file;

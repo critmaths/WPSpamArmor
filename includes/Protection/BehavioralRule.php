@@ -1,7 +1,7 @@
 <?php
-namespace SpamArmor\Protection;
+namespace CyberArmor\Protection;
 
-use SpamArmor\Core\Config;
+use CyberArmor\Core\Config;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -28,7 +28,7 @@ class BehavioralRule implements RuleInterface {
 
     public function check(array $context) {
         $post = $context['post'] ?? [];
-        $behaviorRaw = $post['spamarmor_behavior'] ?? ($post['spm_behavior'] ?? '');
+        $behaviorRaw = $post['cyberarmor_behavior'] ?? ($post['spamarmor_behavior'] ?? ($post['spm_behavior'] ?? ''));
 
         if (empty($behaviorRaw)) {
             // Behavioral data missing: suspicious but not critical on its own
@@ -36,7 +36,7 @@ class BehavioralRule implements RuleInterface {
                 'passed'   => false,
                 'score'    => 35,
                 'critical' => false,
-                'reason'   => __('No human behavioral entropy received from browser.', 'spamarmor-open-source-spam-bot-protection')
+                'reason'   => __('No human behavioral entropy received from browser.', 'cyberarmor')
             ];
         }
 
@@ -46,7 +46,7 @@ class BehavioralRule implements RuleInterface {
                 'passed'   => false,
                 'score'    => 50,
                 'critical' => false,
-                'reason'   => __('Corrupted or malformed behavioral telemetry payload.', 'spamarmor-open-source-spam-bot-protection')
+                'reason'   => __('Corrupted or malformed behavioral telemetry payload.', 'cyberarmor')
             ];
         }
 
@@ -66,7 +66,7 @@ class BehavioralRule implements RuleInterface {
                 'score'    => 65,
                 'critical' => false,
                 'reason'   => sprintf(
-                    __('Abnormal interaction entropy (%d actions recorded for %d chars of content).', 'spamarmor-open-source-spam-bot-protection'),
+                    __('Abnormal interaction entropy (%d actions recorded for %d chars of content).', 'cyberarmor'),
                     $totalInteractions,
                     strlen($content)
                 )

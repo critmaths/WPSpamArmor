@@ -1,9 +1,9 @@
 <?php
-namespace SpamArmor\Admin;
+namespace CyberArmor\Admin;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Database\LogRepository;
-use SpamArmor\Database\StatsRepository;
+use CyberArmor\Core\Config;
+use CyberArmor\Database\LogRepository;
+use CyberArmor\Database\StatsRepository;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Controller for WordPress admin menus, settings pages, and AJAX actions.
+ * Controller for CyberArmor WordPress admin menus, settings pages, and AJAX actions.
  */
 class AdminController {
     public function init() {
@@ -20,8 +20,8 @@ class AdminController {
         add_action('admin_init', [$this, 'handleSettingsSave']);
 
         // AJAX handlers
-        add_action('wp_ajax_spamarmor_clear_logs', [$this, 'ajaxClearLogs']);
-        add_action('wp_ajax_spamarmor_whitelist_ip', [$this, 'ajaxWhitelistIp']);
+        add_action('wp_ajax_cyberarmor_clear_logs', [$this, 'ajaxClearLogs']);
+        add_action('wp_ajax_cyberarmor_whitelist_ip', [$this, 'ajaxWhitelistIp']);
     }
 
     /**
@@ -29,39 +29,39 @@ class AdminController {
      */
     public function registerMenus() {
         add_menu_page(
-            __('SpamArmor', 'spamarmor-open-source-spam-bot-protection'),
-            __('SpamArmor', 'spamarmor-open-source-spam-bot-protection'),
+            __('CyberArmor', 'cyberarmor'),
+            __('CyberArmor', 'cyberarmor'),
             'manage_options',
-            'spamarmor',
+            'cyberarmor',
             [$this, 'renderDashboard'],
             'dashicons-shield-alt',
             80
         );
 
         add_submenu_page(
-            'spamarmor',
-            __('SpamArmor Dashboard', 'spamarmor-open-source-spam-bot-protection'),
-            __('Dashboard', 'spamarmor-open-source-spam-bot-protection'),
+            'cyberarmor',
+            __('CyberArmor Dashboard', 'cyberarmor'),
+            __('Dashboard', 'cyberarmor'),
             'manage_options',
-            'spamarmor',
+            'cyberarmor',
             [$this, 'renderDashboard']
         );
 
         add_submenu_page(
-            'spamarmor',
-            __('Spam Logs', 'spamarmor-open-source-spam-bot-protection'),
-            __('Spam Logs', 'spamarmor-open-source-spam-bot-protection'),
+            'cyberarmor',
+            __('Security Logs', 'cyberarmor'),
+            __('Security Logs', 'cyberarmor'),
             'manage_options',
-            'spamarmor-logs',
+            'cyberarmor-logs',
             [$this, 'renderLogs']
         );
 
         add_submenu_page(
-            'spamarmor',
-            __('SpamArmor Settings', 'spamarmor-open-source-spam-bot-protection'),
-            __('Settings', 'spamarmor-open-source-spam-bot-protection'),
+            'cyberarmor',
+            __('CyberArmor Settings', 'cyberarmor'),
+            __('Settings', 'cyberarmor'),
             'manage_options',
-            'spamarmor-settings',
+            'cyberarmor-settings',
             [$this, 'renderSettings']
         );
     }
@@ -70,28 +70,28 @@ class AdminController {
      * Enqueue admin styles and scripts.
      */
     public function enqueueAssets($hook) {
-        if (strpos($hook, 'spamarmor') === false) {
+        if (strpos($hook, 'cyberarmor') === false && strpos($hook, 'spamarmor') === false) {
             return;
         }
 
         wp_enqueue_style(
-            'spamarmor-admin-css',
-            SPAMARMOR_PLUGIN_URL . 'assets/css/admin.css',
+            'cyberarmor-admin-css',
+            CYBERARMOR_PLUGIN_URL . 'assets/css/admin.css',
             [],
-            SPAMARMOR_VERSION
+            CYBERARMOR_VERSION
         );
 
         wp_enqueue_script(
-            'spamarmor-admin-js',
-            SPAMARMOR_PLUGIN_URL . 'assets/js/admin.js',
+            'cyberarmor-admin-js',
+            CYBERARMOR_PLUGIN_URL . 'assets/js/admin.js',
             ['jquery'],
-            SPAMARMOR_VERSION,
+            CYBERARMOR_VERSION,
             true
         );
 
-        wp_localize_script('spamarmor-admin-js', 'spamarmorAdmin', [
+        wp_localize_script('cyberarmor-admin-js', 'cyberarmorAdmin', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce'   => wp_create_nonce('spamarmor_admin_action')
+            'nonce'   => wp_create_nonce('cyberarmor_admin_action')
         ]);
     }
 
@@ -103,11 +103,11 @@ class AdminController {
         $weeklyTrend = StatsRepository::getWeeklyTrend();
         $recentLogs = LogRepository::getRecent(8);
 
-        include SPAMARMOR_PLUGIN_DIR . 'includes/Admin/Views/dashboard.php';
+        include CYBERARMOR_PLUGIN_DIR . 'includes/Admin/Views/dashboard.php';
     }
 
     /**
-     * Render the spam logs inspection page.
+     * Render the security logs inspection page.
      */
     public function renderLogs() {
         $paged = isset($_GET['paged']) ? max(1, absint($_GET['paged'])) : 1;
@@ -119,7 +119,7 @@ class AdminController {
         $logs = LogRepository::getRecent($limit, $offset, $formFilter);
         $totalPages = ceil($totalLogs / $limit);
 
-        include SPAMARMOR_PLUGIN_DIR . 'includes/Admin/Views/logs.php';
+        include CYBERARMOR_PLUGIN_DIR . 'includes/Admin/Views/logs.php';
     }
 
     /**
@@ -127,33 +127,33 @@ class AdminController {
      */
     public function renderSettings() {
         $settings = Config::getAll();
-        include SPAMARMOR_PLUGIN_DIR . 'includes/Admin/Views/settings.php';
+        include CYBERARMOR_PLUGIN_DIR . 'includes/Admin/Views/settings.php';
     }
 
     /**
      * Handle manual settings post submit.
      */
     public function handleSettingsSave() {
-        if (!isset($_POST['spamarmor_save_settings_nonce'])) {
+        if (!isset($_POST['cyberarmor_save_settings_nonce'])) {
             return;
         }
 
-        $nonce = sanitize_text_field(wp_unslash($_POST['spamarmor_save_settings_nonce']));
-        if (!wp_verify_nonce($nonce, 'spamarmor_save_settings')) {
-            wp_die(esc_html__('Security check failed.', 'spamarmor-open-source-spam-bot-protection'));
+        $nonce = sanitize_text_field(wp_unslash($_POST['cyberarmor_save_settings_nonce']));
+        if (!wp_verify_nonce($nonce, 'cyberarmor_save_settings')) {
+            wp_die(esc_html__('Security check failed.', 'cyberarmor'));
         }
 
         if (!current_user_can('manage_options')) {
-            wp_die(esc_html__('Insufficient permissions.', 'spamarmor-open-source-spam-bot-protection'));
+            wp_die(esc_html__('Insufficient permissions.', 'cyberarmor'));
         }
 
-        $settings = isset($_POST['spamarmor_settings']) && is_array($_POST['spamarmor_settings'])
-            ? wp_unslash($_POST['spamarmor_settings'])
+        $settings = isset($_POST['cyberarmor_settings']) && is_array($_POST['cyberarmor_settings'])
+            ? wp_unslash($_POST['cyberarmor_settings'])
             : [];
 
         Config::saveAll($settings);
 
-        wp_redirect(add_query_arg(['page' => 'spamarmor-settings', 'updated' => 'true'], admin_url('admin.php')));
+        wp_redirect(add_query_arg(['page' => 'cyberarmor-settings', 'updated' => 'true'], admin_url('admin.php')));
         exit;
     }
 
@@ -161,33 +161,33 @@ class AdminController {
      * AJAX handler: clear logs.
      */
     public function ajaxClearLogs() {
-        check_ajax_referer('spamarmor_admin_action', 'nonce');
+        check_ajax_referer('cyberarmor_admin_action', 'nonce');
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(__('Unauthorized', 'spamarmor-open-source-spam-bot-protection'), 403);
+            wp_send_json_error(__('Unauthorized', 'cyberarmor'), 403);
         }
 
         LogRepository::clearAll();
-        wp_send_json_success(__('Logs cleared successfully.', 'spamarmor-open-source-spam-bot-protection'));
+        wp_send_json_success(__('Security logs cleared successfully.', 'cyberarmor'));
     }
 
     /**
      * AJAX handler: whitelist IP.
      */
     public function ajaxWhitelistIp() {
-        check_ajax_referer('spamarmor_admin_action', 'nonce');
+        check_ajax_referer('cyberarmor_admin_action', 'nonce');
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(__('Unauthorized', 'spamarmor-open-source-spam-bot-protection'), 403);
+            wp_send_json_error(__('Unauthorized', 'cyberarmor'), 403);
         }
 
         $ip = isset($_POST['ip']) ? sanitize_text_field(wp_unslash($_POST['ip'])) : '';
         if (empty($ip)) {
-            wp_send_json_error(__('Invalid IP address.', 'spamarmor-open-source-spam-bot-protection'));
+            wp_send_json_error(__('Invalid IP address.', 'cyberarmor'));
         }
 
         $currentList = Config::get('ip_whitelist', '');
         $currentList .= "\n" . $ip;
         Config::set('ip_whitelist', trim($currentList));
 
-        wp_send_json_success(sprintf(__('IP %s added to whitelist.', 'spamarmor-open-source-spam-bot-protection'), esc_html($ip)));
+        wp_send_json_success(sprintf(__('IP %s added to whitelist.', 'cyberarmor'), esc_html($ip)));
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace SpamArmor\Database;
+namespace CyberArmor\Database;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -7,11 +7,11 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Handles fast aggregation and retrieval of daily spam/clean submission statistics.
+ * Handles fast aggregation and retrieval of daily security events and clean submission metrics.
  */
 class StatsRepository {
     /**
-     * Record a spam event for today.
+     * Record a security / spam / firewall event for today.
      *
      * @param string $formType
      */
@@ -42,7 +42,7 @@ class StatsRepository {
         $column = ($type === 'spam') ? 'spam_count' : 'clean_count';
         $formType = sanitize_key($formType ?: 'comment');
 
-        // Upsert for specific form type
+        // Upsert for specific event/form type
         $wpdb->query(
             $wpdb->prepare(
                 "INSERT INTO {$table} (date, form_type, {$column}) 
@@ -92,10 +92,18 @@ class StatsRepository {
             ARRAY_A
         );
 
+        // WAF blocks total
+        $wafStats = $wpdb->get_row(
+            "SELECT COALESCE(SUM(spam_count), 0) as total_waf 
+             FROM {$table} WHERE form_type = 'firewall_waf'",
+            ARRAY_A
+        );
+
         $totalSpam = (int)($allTime['total_spam'] ?? 0);
         $totalClean = (int)($allTime['total_clean'] ?? 0);
         $todaySpam = (int)($todayStats['today_spam'] ?? 0);
         $todayClean = (int)($todayStats['today_clean'] ?? 0);
+        $totalWaf = (int)($wafStats['total_waf'] ?? 0);
 
         $totalProcessed = $totalSpam + $totalClean;
         $blockRate = $totalProcessed > 0 ? round(($totalSpam / $totalProcessed) * 100, 1) : 0;
@@ -105,6 +113,7 @@ class StatsRepository {
             'total_clean'     => $totalClean,
             'today_spam'      => $todaySpam,
             'today_clean'     => $todayClean,
+            'total_waf'       => $totalWaf,
             'block_rate'      => $blockRate,
             'total_processed' => $totalProcessed
         ];

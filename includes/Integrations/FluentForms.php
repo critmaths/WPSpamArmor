@@ -1,9 +1,9 @@
 <?php
-namespace SpamArmor\Integrations;
+namespace CyberArmor\Integrations;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\Plugin;
-use SpamArmor\Core\TokenManager;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\Plugin;
+use CyberArmor\Core\TokenManager;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -69,11 +69,11 @@ class FluentForms implements IntegrationInterface {
         $verdict = $engine->evaluate($context);
 
         if ($verdict['is_spam']) {
-            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Spam submission prevented.', 'spamarmor-open-source-spam-bot-protection');
+            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Spam submission prevented.', 'cyberarmor');
 
             wp_send_json_error([
                 'errors' => [
-                    'spamarmor' => [sprintf(__('SpamArmor: %s', 'spamarmor-open-source-spam-bot-protection'), esc_html($reason))]
+                    'cyberarmor' => [sprintf(__('SpamArmor: %s', 'cyberarmor'), esc_html($reason))]
                 ]
             ], 422);
         }

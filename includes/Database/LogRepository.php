@@ -1,7 +1,7 @@
 <?php
-namespace SpamArmor\Database;
+namespace CyberArmor\Database;
 
-use SpamArmor\Core\Config;
+use CyberArmor\Core\Config;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -9,11 +9,11 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Handles persistence, queries, and pruning for the spam events log table.
+ * Handles persistence, queries, and pruning for the CyberArmor security events log table.
  */
 class LogRepository {
     /**
-     * Insert a new spam log entry.
+     * Insert a new security log entry.
      *
      * @param array $data
      * @return int|false Inserted ID or false

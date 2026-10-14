@@ -1,8 +1,8 @@
 <?php
-namespace SpamArmor\Protection;
+namespace CyberArmor\Protection;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\TokenManager;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\TokenManager;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -45,7 +45,7 @@ class NetworkRateLimitRule implements RuleInterface {
                 'passed'   => false,
                 'score'    => 70,
                 'critical' => false,
-                'reason'   => __('Empty User-Agent header (typical of automated bots).', 'spamarmor-open-source-spam-bot-protection')
+                'reason'   => __('Empty User-Agent header (typical of automated bots).', 'cyberarmor')
             ];
         }
 
@@ -55,7 +55,7 @@ class NetworkRateLimitRule implements RuleInterface {
                     'passed'   => false,
                     'score'    => 95,
                     'critical' => true,
-                    'reason'   => sprintf(__('Automated script User-Agent detected (%s).', 'spamarmor-open-source-spam-bot-protection'), $botSignature)
+                    'reason'   => sprintf(__('Automated script User-Agent detected (%s).', 'cyberarmor'), $botSignature)
                 ];
             }
         }
@@ -64,7 +64,7 @@ class NetworkRateLimitRule implements RuleInterface {
         $rateLimitMax = (int)Config::get('rate_limit_max', 5);
         $rateWindow   = (int)Config::get('rate_limit_window', 60);
 
-        $transientKey = 'spamarmor_flood_' . md5($ip);
+        $transientKey = 'cyberarmor_flood_' . md5($ip);
         $currentCount = (int)get_transient($transientKey);
 
         if ($currentCount >= $rateLimitMax) {
@@ -73,7 +73,7 @@ class NetworkRateLimitRule implements RuleInterface {
                 'score'    => 100,
                 'critical' => true,
                 'reason'   => sprintf(
-                    __('Rate limit exceeded (%d submissions in %d seconds). Flood blocked.', 'spamarmor-open-source-spam-bot-protection'),
+                    __('Rate limit exceeded (%d submissions in %d seconds). Flood blocked.', 'cyberarmor'),
                     $currentCount,
                     $rateWindow
                 )

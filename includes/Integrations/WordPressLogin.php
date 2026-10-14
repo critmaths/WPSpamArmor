@@ -1,9 +1,9 @@
 <?php
-namespace SpamArmor\Integrations;
+namespace CyberArmor\Integrations;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\Plugin;
-use SpamArmor\Core\TokenManager;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\Plugin;
+use CyberArmor\Core\TokenManager;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -70,10 +70,10 @@ class WordPressLogin implements IntegrationInterface {
         $verdict = $engine->evaluate($context);
 
         if ($verdict['is_spam']) {
-            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Suspicious automated login request.', 'spamarmor-open-source-spam-bot-protection');
+            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Suspicious automated login request.', 'cyberarmor');
             return new \WP_Error(
                 'spamarmor_login_blocked',
-                sprintf('<strong>%s:</strong> %s', esc_html__('Access Denied', 'spamarmor-open-source-spam-bot-protection'), esc_html($reason))
+                sprintf('<strong>%s:</strong> %s', esc_html__('Access Denied', 'cyberarmor'), esc_html($reason))
             );
         }
 

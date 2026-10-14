@@ -1,5 +1,5 @@
 <?php
-namespace SpamArmor\Database;
+namespace CyberArmor\Database;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -7,11 +7,11 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Handles database schema migration and table creation.
+ * Handles database schema migration and table creation for CyberArmor.
  */
 class Schema {
-    const LOGS_TABLE = 'spamarmor_logs';
-    const STATS_TABLE = 'spamarmor_stats';
+    const LOGS_TABLE = 'cyberarmor_logs';
+    const STATS_TABLE = 'cyberarmor_stats';
 
     /**
      * Get full table name with WP prefix.
@@ -25,7 +25,7 @@ class Schema {
     }
 
     /**
-     * Run table creation via dbDelta.
+     * Run table creation via dbDelta and migrate legacy tables if needed.
      */
     public static function createTables() {
         global $wpdb;
@@ -36,7 +36,7 @@ class Schema {
         $logsTable = self::getTableName(self::LOGS_TABLE);
         $statsTable = self::getTableName(self::STATS_TABLE);
 
-        // Logs table
+        // Security events log table
         $sqlLogs = "CREATE TABLE {$logsTable} (
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             created_at datetime NOT NULL,
@@ -51,7 +51,7 @@ class Schema {
             KEY ip (ip)
         ) {$charsetCollate};";
 
-        // Daily aggregated stats table
+        // Daily aggregated metrics table
         $sqlStats = "CREATE TABLE {$statsTable} (
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             date date NOT NULL,
@@ -65,6 +65,38 @@ class Schema {
         dbDelta($sqlLogs);
         dbDelta($sqlStats);
 
-        update_option('spamarmor_db_version', SPAMARMOR_VERSION);
+        // Check if legacy tables exist and copy records over if new tables are empty
+        self::migrateLegacyData();
+
+        update_option('cyberarmor_db_version', CYBERARMOR_VERSION);
+    }
+
+    /**
+     * Migrate records from legacy spamarmor_* tables if they exist and target tables are empty.
+     */
+    private static function migrateLegacyData() {
+        global $wpdb;
+
+        $legacyLogs = self::getTableName('spamarmor_logs');
+        $newLogs = self::getTableName(self::LOGS_TABLE);
+
+        if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $legacyLogs)) === $legacyLogs) {
+            $newCount = (int)$wpdb->get_var("SELECT COUNT(*) FROM {$newLogs}");
+            if ($newCount === 0) {
+                $wpdb->query("INSERT IGNORE INTO {$newLogs} (created_at, form_type, ip, score, reasons, content) 
+                              SELECT created_at, form_type, ip, score, reasons, content FROM {$legacyLogs}");
+            }
+        }
+
+        $legacyStats = self::getTableName('spamarmor_stats');
+        $newStats = self::getTableName(self::STATS_TABLE);
+
+        if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $legacyStats)) === $legacyStats) {
+            $newStatsCount = (int)$wpdb->get_var("SELECT COUNT(*) FROM {$newStats}");
+            if ($newStatsCount === 0) {
+                $wpdb->query("INSERT IGNORE INTO {$newStats} (date, form_type, spam_count, clean_count) 
+                              SELECT date, form_type, spam_count, clean_count FROM {$legacyStats}");
+            }
+        }
     }
 }

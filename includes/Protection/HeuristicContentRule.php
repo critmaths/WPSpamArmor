@@ -1,7 +1,7 @@
 <?php
-namespace SpamArmor\Protection;
+namespace CyberArmor\Protection;
 
-use SpamArmor\Core\Config;
+use CyberArmor\Core\Config;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -62,14 +62,14 @@ class HeuristicContentRule implements RuleInterface {
         $reasons = [];
 
         // 1. Link density & count inspection
-        $urlCount = preg_match_all('#https?://[^\s<>"\'()]+#i', $content, $matches);
+        $urlCount = preg_match_all("#https?://[^\\s<>\"'()]+#i", $content, $matches);
         $maxLinks = (int)Config::get('max_allowed_links', 2);
 
         if ($urlCount > $maxLinks) {
             $excessLinks = $urlCount - $maxLinks;
             $linkScore = min(50, $excessLinks * 20);
             $score += $linkScore;
-            $reasons[] = sprintf(__('Excessive links (%d URLs found, limit is %d).', 'spamarmor-open-source-spam-bot-protection'), $urlCount, $maxLinks);
+            $reasons[] = sprintf(__('Excessive links (%d URLs found, limit is %d).', 'cyberarmor'), $urlCount, $maxLinks);
         }
 
         // 2. High-risk TLD check
@@ -83,7 +83,7 @@ class HeuristicContentRule implements RuleInterface {
                     if (in_array($tld, self::SPAMMY_TLDS, true)) {
                         $foundSpamTld = true;
                         $score += 45;
-                        $reasons[] = sprintf(__('High-risk spam TLD detected (.%s).', 'spamarmor-open-source-spam-bot-protection'), $tld);
+                        $reasons[] = sprintf(__('High-risk spam TLD detected (.%s).', 'cyberarmor'), $tld);
                         break;
                     }
                 }
@@ -94,7 +94,7 @@ class HeuristicContentRule implements RuleInterface {
         if (Config::get('block_bbcode', true)) {
             if (preg_match('#\[url[=\s\]]#i', $content) || preg_match('#<a\s+href=#i', $content)) {
                 $score += 35;
-                $reasons[] = __('BBCode / HTML anchor tags injected into content.', 'spamarmor-open-source-spam-bot-protection');
+                $reasons[] = __('BBCode / HTML anchor tags injected into content.', 'cyberarmor');
             }
         }
 
@@ -124,7 +124,7 @@ class HeuristicContentRule implements RuleInterface {
             $wordPenalty = min(60, count($matchedWords) * 30);
             $score += $wordPenalty;
             $reasons[] = sprintf(
-                __('Spam keywords detected: %s', 'spamarmor-open-source-spam-bot-protection'),
+                __('Spam keywords detected: %s', 'cyberarmor'),
                 implode(', ', array_slice($matchedWords, 0, 3))
             );
         }
@@ -132,7 +132,7 @@ class HeuristicContentRule implements RuleInterface {
         // 5. Repetitive characters & gibberish runs (e.g. "aaaaaaa", "asdfghjkl")
         if (preg_match('/(.)\1{7,}/', $content)) {
             $score += 30;
-            $reasons[] = __('Excessive character repetition detected.', 'spamarmor-open-source-spam-bot-protection');
+            $reasons[] = __('Excessive character repetition detected.', 'cyberarmor');
         }
 
         $threshold = (int)Config::get('spam_score_threshold', 50);

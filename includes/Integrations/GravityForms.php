@@ -1,9 +1,9 @@
 <?php
-namespace SpamArmor\Integrations;
+namespace CyberArmor\Integrations;
 
-use SpamArmor\Core\Config;
-use SpamArmor\Core\Plugin;
-use SpamArmor\Core\TokenManager;
+use CyberArmor\Core\Config;
+use CyberArmor\Core\Plugin;
+use CyberArmor\Core\TokenManager;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -70,14 +70,14 @@ class GravityForms implements IntegrationInterface {
         $verdict = $engine->evaluate($context);
 
         if ($verdict['is_spam']) {
-            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Submission flagged as spam.', 'spamarmor-open-source-spam-bot-protection');
+            $reason = !empty($verdict['reasons']) ? implode(' ', $verdict['reasons']) : __('Submission flagged as spam.', 'cyberarmor');
             $validation_result['is_valid'] = false;
 
             // Flag first field with error message
             if (!empty($form['fields'])) {
                 foreach ($form['fields'] as &$field) {
                     $field->failed_validation = true;
-                    $field->validation_message = sprintf(__('SpamArmor: %s', 'spamarmor-open-source-spam-bot-protection'), esc_html($reason));
+                    $field->validation_message = sprintf(__('SpamArmor: %s', 'cyberarmor'), esc_html($reason));
                     break;
                 }
             }

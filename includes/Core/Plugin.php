@@ -1,11 +1,13 @@
 <?php
-namespace SpamArmor\Core;
+namespace CyberArmor\Core;
 
-use SpamArmor\Admin\AdminController;
-use SpamArmor\Database\Schema;
-use SpamArmor\Integrations\IntegrationManager;
-use SpamArmor\Protection\ProtectionEngine;
-use SpamArmor\Rest\TokenController;
+use CyberArmor\Admin\AdminController;
+use CyberArmor\Database\Schema;
+use CyberArmor\Firewall\FirewallEngine;
+use CyberArmor\Hardening\HardeningEngine;
+use CyberArmor\Integrations\IntegrationManager;
+use CyberArmor\Protection\ProtectionEngine;
+use CyberArmor\Rest\TokenController;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -13,7 +15,7 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Main plugin orchestrator and service container.
+ * Main CyberArmor plugin orchestrator and service container.
  */
 class Plugin {
     /**
@@ -25,6 +27,16 @@ class Plugin {
      * @var ProtectionEngine
      */
     private $protectionEngine;
+
+    /**
+     * @var FirewallEngine
+     */
+    private $firewallEngine;
+
+    /**
+     * @var HardeningEngine
+     */
+    private $hardeningEngine;
 
     /**
      * @var IntegrationManager
@@ -55,6 +67,8 @@ class Plugin {
 
     private function __construct() {
         $this->protectionEngine = new ProtectionEngine();
+        $this->firewallEngine = new FirewallEngine();
+        $this->hardeningEngine = new HardeningEngine();
         $this->integrationManager = new IntegrationManager();
         $this->tokenController = new TokenController();
 
@@ -81,19 +95,25 @@ class Plugin {
      * Boot all plugin services, hooks, and assets.
      */
     public function boot() {
-        // Enqueue frontend scripts and styles
+        // 1. Boot early Web Application Firewall (WAF)
+        $this->firewallEngine->boot();
+
+        // 2. Boot Core Hardening & Security Headers
+        $this->hardeningEngine->boot();
+
+        // 3. Enqueue frontend scripts and styles
         add_action('wp_enqueue_scripts', [$this, 'enqueueFrontendAssets']);
         add_action('login_enqueue_scripts', [$this, 'enqueueFrontendAssets']);
 
-        // Register REST API routes
+        // 4. Register REST API routes
         add_action('rest_api_init', [$this->tokenController, 'registerRoutes']);
 
-        // Boot admin if in wp-admin
+        // 5. Boot admin if in wp-admin
         if ($this->adminController !== null) {
             $this->adminController->init();
         }
 
-        // Boot all enabled form adapters
+        // 6. Boot all enabled form adapters
         $this->integrationManager->boot();
     }
 
@@ -106,22 +126,22 @@ class Plugin {
         }
 
         wp_enqueue_style(
-            'spamarmor-front',
-            SPAMARMOR_PLUGIN_URL . 'assets/css/spamarmor-front.css',
+            'cyberarmor-front',
+            CYBERARMOR_PLUGIN_URL . 'assets/css/cyberarmor-front.css',
             [],
-            SPAMARMOR_VERSION
+            CYBERARMOR_VERSION
         );
 
         wp_enqueue_script(
-            'spamarmor-front',
-            SPAMARMOR_PLUGIN_URL . 'assets/js/spamarmor-front.js',
+            'cyberarmor-front',
+            CYBERARMOR_PLUGIN_URL . 'assets/js/cyberarmor-front.js',
             [],
-            SPAMARMOR_VERSION,
+            CYBERARMOR_VERSION,
             true // Load in footer
         );
 
-        wp_localize_script('spamarmor-front', 'spamarmorSettings', [
-            'restUrl'    => esc_url_raw(rest_url('spamarmor/v1/token')),
+        wp_localize_script('cyberarmor-front', 'cyberarmorSettings', [
+            'restUrl'    => esc_url_raw(rest_url('cyberarmor/v1/token')),
             'difficulty' => (int)Config::get('pow_difficulty', 3)
         ]);
     }
@@ -133,6 +153,24 @@ class Plugin {
      */
     public function getProtectionEngine() {
         return $this->protectionEngine;
+    }
+
+    /**
+     * Get the FirewallEngine instance.
+     *
+     * @return FirewallEngine
+     */
+    public function getFirewallEngine() {
+        return $this->firewallEngine;
+    }
+
+    /**
+     * Get the HardeningEngine instance.
+     *
+     * @return HardeningEngine
+     */
+    public function getHardeningEngine() {
+        return $this->hardeningEngine;
     }
 
     /**
