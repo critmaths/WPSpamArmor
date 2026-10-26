@@ -61,3 +61,4 @@ function cyberarmor_init() {
     \CyberArmor\Core\Plugin::instance()->boot();
 }
 add_action('plugins_loaded', 'cyberarmor_init');
+

@@ -245,3 +245,4 @@ class FirewallEngine {
         wp_die($message, $title, ['response' => 403, 'back_link' => false]);
     }
 }
+
